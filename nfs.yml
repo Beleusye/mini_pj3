@@ -1,0 +1,32 @@
+---
+- name: install nfs-server, chown, systemd start, port open
+  hosts: nfs
+
+  tasks:
+    - name: install nfs-server
+      apt:
+        name: nfs-kernel-server
+        state: latest
+
+    - name: mkdir /nfs
+      file:
+        path: /nfs
+        state: directory
+        owner: nobody
+        group: nogroup
+
+    - name: create export
+      blockinfile:
+        path: /etc/exports
+        create: yes
+        block: "/nfs *(rw,sync,no_subtree_check)"
+
+    - name: systemd start nfs-server
+      systemd:
+        name: nfs-kernel-server
+        state: restarted
+
+    - name: nfs port open
+      ufw:
+        port: 2049
+        rule: allow

@@ -1,0 +1,56 @@
+---
+- name: install vsftpd, edit config, systemd start, port open
+  hosts: ftp
+
+  tasks:
+    - name: install vsftpd
+      apt:
+        name: vsftpd
+        state: latest
+
+    - name: create /ftp directory
+      file:
+        path: /ftp
+        state: directory
+
+    - name: edit config file
+      blockinfile:
+        path: /etc/vsftpd.conf
+        block: |
+          xferlog_file=/ftp/vsftpd.log
+          xferlog_std_format=YES
+          idle_session_timeout=120
+          data_connection_timeout=60
+          banner_file=/ftp/banner
+          chroot_local_user=YES
+          allow_writeable_chroot=YES
+          pasv_enable=YES
+          pasv_min_port=65000
+          pasv_max_port=65100
+          deny_file={*.exe}
+
+    - name: create banner file
+      blockinfile:
+        path: /ftp/banner
+        create: yes
+        block: |
+          #############
+          # WARNING ! ############
+          # NON AUTHORIZED USER !#
+          ########################
+        marker: ""
+
+    - name: systemd start vsftpd
+      systemd:
+        name: vsftpd
+        state: started
+
+    - name: ftp port open
+      ufw:
+        port: "{{ item }}"
+        rule: allow
+        proto: tcp
+      with_items:
+        - 21
+        - 65000:65100
+

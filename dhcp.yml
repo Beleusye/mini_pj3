@@ -1,0 +1,34 @@
+---
+- name: install dhcp, edit config, systemd start
+  hosts: dhcp
+  
+  tasks:
+    - name: install dhcp
+      apt:
+        name: isc-dhcp-server
+        state: latest
+
+    - name: edit config file
+      blockinfile:
+        path: /etc/dhcp/dhcpd.conf
+        block: |
+          subnet 10.0.0.0 netmask 255.255.255.0 {
+            range 10.0.0.51 10.0.0.250;
+            option domain-name-servers 168.126.63.1,8.8.8.8;
+            option domain-name "sh-kim.store";
+            option subnet-mask 255.255.255.0;
+            option routers 10.0.0.254;
+            option broadcast-address 10.0.0.255;
+            default-lease-time 3600;
+            max-lease-time 7200;
+          }
+
+          host fantasia {
+            hardware ethernet 08:00:07:26:c0:a5;
+            fixed-address 10.0.0.101;
+          }
+
+    - name: systemd start
+      systemd:
+        name: isc-dhcp-server
+        state: started
