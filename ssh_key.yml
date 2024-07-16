@@ -1,0 +1,16 @@
+---
+- name: ssh deploy
+  hosts: all
+
+  tasks:
+    - name: create key
+      connection: local
+      command: "ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ''"
+      ignore_errors: yes
+      run_once: true
+
+    - name: push key
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
