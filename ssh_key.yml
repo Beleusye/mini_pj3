@@ -5,7 +5,7 @@
   tasks:
     - name: create key
       connection: local
-      command: "ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ''"
+      command: "ssh-keygen -b 2048 -t rsa -f {{ lookup('env','HOME') }}/.ssh/id_rsa -q -N ''"
       ignore_errors: yes
       run_once: true
 
