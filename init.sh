@@ -27,6 +27,9 @@ network:
   version: 2
 EOF
 
+# network 설정 적용
+sudo netplan apply
+
 # hostname 설정
 sudo hostnamectl set-hostname $set_hostname
 
