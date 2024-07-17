@@ -1,0 +1,8 @@
+#! /bin/bash
+
+export set_root_password="It1"
+export set_ip_address="45"
+export set_cidr="10.0.0"
+export set_hostname="ansible"
+export set_username="shkim"
+
