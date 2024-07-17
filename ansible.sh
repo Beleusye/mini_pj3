@@ -18,7 +18,6 @@ sudo wget https://raw.githubusercontent.com/Beleusye/mini_pj3/master/nfs.yml
 sudo wget https://raw.githubusercontent.com/Beleusye/mini_pj3/master/k8s_master_node.yml
 
 # ssh 공개 키 배포
-sudo export ANSIBLE_HOST_KEY_CHECKING=False
 sudo echo "ansible_ssh_pass: ${set_root_password}" > ssh_pass.yml
 sudo ansible-playbook ssh_key.yml -u root --vault-password-file ssh_pass.yml
 
