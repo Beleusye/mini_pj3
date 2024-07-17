@@ -7,7 +7,7 @@
 [nfs]
 10.0.0.43
 
-[eks-master]
+[eks_master]
 10.0.0.44
 
 [ansible]
