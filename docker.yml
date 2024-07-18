@@ -1,0 +1,48 @@
+---
+- name: docker image build, ecr_public image push
+  hosts: eks_master
+
+  vars:
+    image_name: babo-wp
+
+  tasks:
+    - name: docker install
+      snap:
+        name: docker
+
+    - name: pip install
+      apt:
+        name: pip
+
+    - name: docker library install
+      pip:
+        name: docker
+
+    - name: find Dockerfile path
+      command: find / -name Dockerfile
+      register: dockerfile_path
+      changed_when: false
+
+    - name: docker image build
+      docker_image:
+        name: "{{ image_name }}"
+        build:
+          path: "{{ dockerfile_path.stdout | dirname }}"
+
+    - name: set variable ecr (get ecr-public repository name)
+      shell: aws ecr-public describe-registries --region us-east-1 | grep name | awk -F'"' '{print $4}'
+      register: ecr
+      changed_when: false
+
+    - name: check variable
+      debug:
+        msg: "{{ ecr.stdout }}"
+
+    - name: authenticate your Docker client to your registry
+      shell: "aws ecr-public get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin public.ecr.aws/{{ ecr.stdout }}"
+
+    - name: set image tag
+      command: "docker tag {{ image_name }} public.ecr.aws/{{ ecr.stdout }}/shkim:{{ image_name }}"
+
+    - name: image push to ecr-public
+      command: "docker push public.ecr.aws/{{ ecr.stdout }}/shkim:{{ image_name }}"
