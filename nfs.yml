@@ -1,5 +1,5 @@
 ---
-- name: install nfs-server, chown, systemd start, port open
+- name: nfs-server install, chown, systemd start, port open
   hosts: nfs
 
   tasks:
