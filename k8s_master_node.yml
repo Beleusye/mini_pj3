@@ -1,26 +1,16 @@
 ---
-- name: EKS Cluster _ K8s Master Node Configure + AWS CLI install
+- name: get kubectl, aws-iam-authenticator, aws_cli install
   hosts: eks_master
 
   tasks:
-    - name: mkdir ~/bin
-      file:
-        path: ~/bin
-        state: directory
-
     - name: get kubectl, aws-iam-authenticator
       get_url:
         url: "{{ item }}"
-        dest: ~/bin
+        dest: /bin
         mode: "0755"
       with_items:
         - "https://s3.us-west-2.amazonaws.com/amazon-eks/1.30.0/2024-05-12/bin/linux/amd64/kubectl"
         - "https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/aws-iam-authenticator"
-
-    - name: export PATH
-      shell: |
-        export PATH=$HOME/bin:$PATH
-        echo 'export PATH=$HOME/bin:$PATH' >> /root/.bashrc
 
     - name: get AWSCLIV2
       get_url:
