@@ -23,7 +23,7 @@
             max-lease-time 7200;
           }
 
-          host fantasia {
+          host W10 {
             hardware ethernet 08:00:07:26:c0:a5;
             fixed-address 10.0.0.101;
           }
