@@ -1,5 +1,5 @@
 ---
-- name: install vsftpd, edit config, systemd start, port open
+- name: vsftpd install, edit config, systemd start, port open
   hosts: ftp
 
   tasks:
