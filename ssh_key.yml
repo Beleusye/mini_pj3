@@ -2,6 +2,9 @@
 - name: ssh deploy
   hosts: all
 
+  vars_files:
+    - ssh_pass.yml
+
   tasks:
     - name: create key
       connection: local

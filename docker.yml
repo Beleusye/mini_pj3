@@ -18,16 +18,16 @@
       pip:
         name: docker
 
-    - name: find Dockerfile path
-      command: find / -name Dockerfile
-      register: dockerfile_path
-      changed_when: false
+    - name: get Dockerfile on Github
+      get_url:
+        url: "https://raw.githubusercontent.com/Beleusye/mini_pj3/master/Dockerfile"
+        path: "{{ lookup('env','HOME') }}"
 
     - name: docker image build
       docker_image:
         name: "{{ image_name }}"
         build:
-          path: "{{ dockerfile_path.stdout | dirname }}"
+          path: "{{ lookup('env','HOME') }}"
 
     - name: set variable ecr (get ecr-public repository name)
       shell: aws ecr-public describe-registries --region us-east-1 | grep name | awk -F'"' '{print $4}'
