@@ -1,5 +1,5 @@
 ---
-- name: get kubectl, aws-iam-authenticator, aws_cli install
+- name: get kubectl, get aws-iam-authenticator, aws_cli install
   hosts: eks_master
 
   tasks:
