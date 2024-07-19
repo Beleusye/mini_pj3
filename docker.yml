@@ -10,18 +10,34 @@
       snap:
         name: docker
 
-    - name: pip install
-      apt:
-        name: pip
-
-    - name: docker library install
-      pip:
-        name: docker
-
     - name: get Dockerfile on Github
       get_url:
         url: "https://raw.githubusercontent.com/Beleusye/mini_pj3/master/Dockerfile"
         dest: "{{ lookup('env','HOME') }}"
+
+    - name: install pip for python3
+      apt:
+        update_cache: yes
+        name: python3-pip
+
+    - name: docker library install
+      pip:
+        name: docker
+        executable: pip3
+
+    - name: get rds endpoint
+      shell: aws rds describe-db-instances | grep Address | awk -F'"' '{print $4}'
+      register: "rds"
+
+    - name: check var rds
+      debug:
+        msg: "{{ rds.stdout }}"
+
+    - name: replace rds endpoint on Dockerfile
+      replace:
+        path: "{{ lookup('env','HOME') }}/Dockerfile"
+        regexp: "rds_endpoint_here"
+        replace: "{{ rds.stdout }}"
 
     - name: docker image build
       docker_image:
@@ -31,10 +47,9 @@
 
     - name: set variable ecr (get ecr-public repository name)
       shell: aws ecr-public describe-registries --region us-east-1 | grep name | awk -F'"' '{print $4}'
-      register: ecr
-      changed_when: false
+      register: "ecr"
 
-    - name: check variable
+    - name: check var ecr
       debug:
         msg: "{{ ecr.stdout }}"
 
