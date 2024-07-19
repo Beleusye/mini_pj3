@@ -4,7 +4,7 @@
 source ./var
 
 # ansible 설치
-sudo apt install -y ansible
+sudo apt install -y ansible sshpass
 
 # ansible 설정 파일, 인벤토리 가져오기
 sudo curl https://raw.githubusercontent.com/Beleusye/mini_pj3/master/ansible.cfg > ~/ansible.cfg
