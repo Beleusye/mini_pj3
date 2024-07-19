@@ -15,7 +15,7 @@ sudo wget -N https://raw.githubusercontent.com/Beleusye/mini_pj3/master/ssh_key.
 sudo wget -N https://raw.githubusercontent.com/Beleusye/mini_pj3/master/dhcp.yml
 sudo wget -N https://raw.githubusercontent.com/Beleusye/mini_pj3/master/ftp.yml
 sudo wget -N https://raw.githubusercontent.com/Beleusye/mini_pj3/master/nfs.yml
-sudo wget -N https://raw.githubusercontent.com/Beleusye/mini_pj3/master/k8s_master_node.yml
+sudo wget -N https://raw.githubusercontent.com/Beleusye/mini_pj3/master/kubectl.yml
 sudo wget -N https://raw.githubusercontent.com/Beleusye/mini_pj3/master/docker.yml
 
 # sshpass 설치 (SSH 키 배포 시 필요)
@@ -37,7 +37,7 @@ sudo ansible-playbook ftp.yml
 sudo ansible-playbook nfs.yml
 
 # K8S_Master_Node_Configure
-sudo ansible-playbook k8s_master_node.yml
+sudo ansible-playbook kubectl.yml
 
 # AWS CLI Configure 보안 상 직접 구성
 echo "Next Step - Configure Yourself
