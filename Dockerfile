@@ -9,7 +9,7 @@ cp /wordpress/wp-config-sample.php /wordpress/wp-config.php && \
 sed -i 's/database_name_here/wordpress/' /wordpress/wp-config.php && \
 sed -i 's/username_here/root/' /wordpress/wp-config.php && \
 sed -i 's/password_here/It12345!/' /wordpress/wp-config.php && \
-sed -i 's/localhost/rds_endpoint_here' /wordpress/wp-config.php && \
+sed -i 's/localhost/rds_endpoint_here/' /wordpress/wp-config.php && \
 cp -ar /wordpress/* /var/www/localhost/htdocs/ && \
 echo test > /var/www/localhost/htdocs/index.html
 
