@@ -10,9 +10,9 @@
       snap:
         name: docker
 
-    - name: pip install
-      apt:
-        name: pip
+   - name: pip install
+     apt:
+       name: pip
 
     - name: docker library install
       pip:
@@ -21,7 +21,22 @@
     - name: get Dockerfile on Github
       get_url:
         url: "https://raw.githubusercontent.com/Beleusye/mini_pj3/master/Dockerfile"
-        path: "{{ lookup('env','HOME') }}"
+        dest: "{{ lookup('env','HOME') }}"
+
+    - name: get rds endpoint
+      shell: aws rds describe-db-instances | grep Address | awk -F'"' '{print $4}'
+      register: rds
+      changed_when: false
+
+    - name: check variable rds
+      debug:
+        msg: "{{ rds.stdout }}"
+
+    - name: replace rds_endpoint on Dockerfile
+      replace:
+        path: "{{ lookup('env','HOME') }}/Dockerfile"
+        regexp: "rds_endpoint_here"
+        replace: "{{ rds.stdout }}"
 
     - name: docker image build
       docker_image:
@@ -34,7 +49,7 @@
       register: ecr
       changed_when: false
 
-    - name: check variable
+    - name: check variable ecr
       debug:
         msg: "{{ ecr.stdout }}"
 
