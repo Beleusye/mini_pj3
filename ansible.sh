@@ -19,7 +19,9 @@ sudo wget https://raw.githubusercontent.com/Beleusye/mini_pj3/master/k8s_master_
 
 # ssh 공개 키 배포
 sudo echo "ansible_ssh_pass: ${set_root_password}" > ssh_pass.yml
-sudo ansible-playbook ssh_key.yml -u root --vault-password-file ssh_pass.yml
+sudo echo "${set_root_password}" > vault_pass.txt
+sudo ansible-vault encrypt --vault-password-file=vault_pass.txt ssh_pass.yml
+sudo ansible-playbook ssh_key.yml -u root --vault-password-file vault_pass.txt
 
 # DHCP 배포
 sudo ansible-playbook dhcp.yml
@@ -37,3 +39,4 @@ sudo ansible-playbook k8s_master_node.yml
 echo "Next Step - Configure Yourself
 - aws configure
 - aws eks update-kubeconfig --region [Region] --name [Cluster_Name]"
+
