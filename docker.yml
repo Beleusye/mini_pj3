@@ -10,29 +10,30 @@
       snap:
         name: docker
 
-   - name: pip install
-     apt:
-       name: pip
-
-    - name: docker library install
-      pip:
-        name: docker
-
     - name: get Dockerfile on Github
       get_url:
         url: "https://raw.githubusercontent.com/Beleusye/mini_pj3/master/Dockerfile"
         dest: "{{ lookup('env','HOME') }}"
 
-    - name: get rds endpoint
-      shell: aws rds describe-db-instances | grep Address | awk -F'"' '{print $4}'
-      register: rds
-      changed_when: false
+    - name: install pip for python3
+      apt:
+        update_cache: yes
+        name: python3-pip
 
-    - name: check variable rds
+    - name: docker library install
+      pip:
+        name: docker
+        executable: pip3
+
+    - name: get rds endpoint
+      command: "aws rds describe-db-instances --query 'DBInstances[0].Endpoint.Address' --output text"
+      register: "rds"
+
+    - name: check var rds
       debug:
         msg: "{{ rds.stdout }}"
 
-    - name: replace rds_endpoint on Dockerfile
+    - name: replace rds endpoint on Dockerfile
       replace:
         path: "{{ lookup('env','HOME') }}/Dockerfile"
         regexp: "rds_endpoint_here"
@@ -45,11 +46,11 @@
           path: "{{ lookup('env','HOME') }}"
 
     - name: set variable ecr (get ecr-public repository name)
-      shell: aws ecr-public describe-registries --region us-east-1 | grep name | awk -F'"' '{print $4}'
-      register: ecr
+      command: "aws ecr-public describe-registries --region us-east-1 --query 'registries[0].aliases[0].name' --output text"
+      register: "ecr"
       changed_when: false
 
-    - name: check variable ecr
+    - name: check var ecr
       debug:
         msg: "{{ ecr.stdout }}"
 
