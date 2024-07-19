@@ -3,17 +3,17 @@
   hosts: ftp
 
   tasks:
-    - name: install vsftpd
+    - name: vsftpd install
       apt:
         name: vsftpd
         state: latest
 
-    - name: create /ftp directory
+    - name: mkdir /ftp
       file:
         path: /ftp
         state: directory
 
-    - name: edit config file
+    - name: vsftpd.conf edit
       blockinfile:
         path: /etc/vsftpd.conf
         block: |
@@ -53,4 +53,3 @@
       with_items:
         - 21
         - 65000:65100
-
