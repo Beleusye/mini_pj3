@@ -21,7 +21,7 @@
     - name: get Dockerfile on Github
       get_url:
         url: "https://raw.githubusercontent.com/Beleusye/mini_pj3/master/Dockerfile"
-        path: "{{ lookup('env','HOME') }}"
+        dest: "{{ lookup('env','HOME') }}"
 
     - name: docker image build
       docker_image:
