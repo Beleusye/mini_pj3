@@ -1,7 +1,7 @@
 FROM alpine
 
 RUN sed -i 's/https/http/g' /etc/apk/repositories && \
-apk add apache2 php php-mysqli php-apache2 && \
+apk add apache2 php php-mysqli php-apache2 php-json php-curl php-gd php-mysqlnd && \
 sed -i 's/index.html/index.php/' /etc/apache2/httpd.conf && \
 wget https://ko.wordpress.org/wordpress-6.5.5-ko_KR.tar.gz -O wordpress.tar.gz && \
 tar xvfz wordpress.tar.gz  && \
